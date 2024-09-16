@@ -1,0 +1,195 @@
+openapi: 3.0.1
+
+info:
+  title: CAT API
+  version: 1.0.0
+  description: API sandbox as exercise to get ready for main software
+  contact:
+    email: sasa.djikic@competec.ch
+    name: Sasa Djikic
+
+servers:
+  - url: 'http://localhost:8400'
+
+
+paths:
+  /cats:
+    get:
+      summary: get all cats
+      description: returns all cats
+      operationId: get-cats
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CatResponse'
+        '500':
+          description: Internal Server Error - generic server error
+        '503':
+          description: Service Unavailable - database down
+      tags:
+        - cat-api
+    post:
+      summary: create new cat
+      description: a new cat entity will be created and stored in the database.
+      operationId: post-cats
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CatRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatResponse'
+        '500':
+          description: Internal Server Error - generic server error
+        '503':
+          description: Service Unavailable - ex. database down
+        '400':
+          description: Bad Request - ex. no valid request given
+      tags:
+        - cat-api
+    parameters: [ ]
+  /cats/{_id}:
+    get:
+      summary: get cat by _id
+      description: returns only the cat with the given _id
+      operationId: get-cats-id
+      parameters:
+        - in: path
+          name: _id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatResponse'
+        '500':
+          description: Internal Server Error - generic server error
+        '503':
+          description: Service Unavailable - ex. database down
+        '400':
+          description: Bad Request - ex. no valid request given, wrong datatype
+        '404':
+          description: Not Found - entry not found, id not found
+      tags:
+        - cat-api
+    put:
+      summary: updates cat by _id
+      description: updates the cat with the given _id
+      operationId: put-cats-id
+      parameters:
+        - in: path
+          name: _id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CatRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatResponse'
+        '500':
+          description: Internal Server Error - generic server error
+        '503':
+          description: Service Unavailable - ex. database down
+        '400':
+          description: Bad Request - ex. no valid request given, wrong datatype
+        '404':
+          description: Not Found - entry not found, id not found
+      tags:
+        - cat-api
+    delete:
+      summary: deletes cat by _id
+      description: deletes the cat with the given _id
+      operationId: delete-cats-id
+      parameters:
+        - in: path
+          name: _id
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: cat successfully deleted
+        '500':
+          description: Internal Server Error - generic server error
+        '503':
+          description: Service Unavailable - ex. database down
+        '400':
+          description: Bad Request - ex. no valid request given, wrong datatype
+        '404':
+          description: Not Found - entry not found, id not found
+      tags:
+        - cat-api
+    parameters: [ ]
+
+components:
+  schemas:
+    CatRequest:
+      type: object
+      required:
+        - name
+        - age
+      properties:
+        name:
+          type: string
+        age:
+          type: integer
+          minimum: 1
+          description: only positive numbers
+        buyer:
+          type: string
+          nullable: true
+          description: optional
+    CatResponse:
+      type: object
+      required:
+        - _id
+        - name
+        - age
+        - buyer
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        age:
+          type: integer
+          minimum: 1
+          description: only positive numbers
+        buyer:
+          type: string
+          nullable: true
+          description: optional
+    UnexpectedError:
+      type: object
+      properties:
+        message:
+          type: string
+x-internal: false
