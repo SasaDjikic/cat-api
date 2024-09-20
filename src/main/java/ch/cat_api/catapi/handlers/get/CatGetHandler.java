@@ -3,15 +3,15 @@ package ch.cat_api.catapi.handlers.get;
 import ch.cat_api.catapi.repositories.CatRepository;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
+@Singleton
 public class CatGetHandler implements Handler<RoutingContext>
 {
-  private final CatRepository catRepository;
 
-  public CatGetHandler(final CatRepository catRepository)
-  {
-    this.catRepository = catRepository;
-  }
+  @Inject
+  public CatRepository catRepository;
 
   public void handle(final RoutingContext routingContext)
   {

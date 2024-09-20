@@ -7,16 +7,15 @@ import ch.cat_api.catapi.handlers.exceptions.NotFoundException;
 import ch.cat_api.catapi.util.CatMapper;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.util.List;
 
+@Singleton
 public class CatRepository
 {
-  private final MongoDbFactory mongoDbFactory;
-
-  public CatRepository(final MongoDbFactory mongoDbFactory)
-  {
-    this.mongoDbFactory = mongoDbFactory;
-  }
+  @Inject
+  public MongoDbFactory mongoDbFactory;
 
   public Future<List<JsonObject>> load()
   {

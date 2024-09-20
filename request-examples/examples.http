@@ -18,7 +18,7 @@ Content-Type: application/json
 
 ### Put cat
 
-PUT http://127.0.0.1:8400/cats/66ed36af69d84a6df23f0f89
+PUT http://127.0.0.1:8400/cats/66ed31e56b2ee85420bfaa6c
 Content-Type: application/json
 
 {

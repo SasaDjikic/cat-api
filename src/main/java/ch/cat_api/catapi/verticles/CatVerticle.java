@@ -6,59 +6,71 @@ import ch.cat_api.catapi.handlers.get.CatGetByIdHandler;
 import ch.cat_api.catapi.handlers.get.CatGetHandler;
 import ch.cat_api.catapi.handlers.post.CatPostHandler;
 import ch.cat_api.catapi.handlers.put.CatPutHandler;
-import ch.cat_api.catapi.repositories.CatRepository;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.openapi.RouterBuilder;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
+@Singleton
 public class CatVerticle extends AbstractVerticle
 {
-  private final ExceptionHandler exceptionHandler;
-  private final CatRepository catRepository;
 
-  public CatVerticle(final ExceptionHandler exceptionHandler, final CatRepository catRepository) {
+
+  public final ExceptionHandler exceptionHandler;
+  public final CatGetByIdHandler catGetByIdHandler;
+  public final CatGetHandler catGetHandler;
+  public final CatPostHandler catPostHandler;
+  public final CatPutHandler catPutHandler;
+  public final CatDeleteHandler catDeleteHandler;
+
+  @Inject
+  public CatVerticle(
+    final ExceptionHandler exceptionHandler,
+    final CatGetByIdHandler catGetByIdHandler,
+    final CatGetHandler catGetHandler,
+    final CatPostHandler catPostHandler,
+    final CatPutHandler catPutHandler,
+    final CatDeleteHandler catDeleteHandler
+  )
+  {
     this.exceptionHandler = exceptionHandler;
-    this.catRepository = catRepository;
+    this.catGetByIdHandler = catGetByIdHandler;
+    this.catGetHandler = catGetHandler;
+    this.catPostHandler = catPostHandler;
+    this.catPutHandler = catPutHandler;
+    this.catDeleteHandler = catDeleteHandler;
   }
 
-  @Override
-  public void start(Promise<Void> startPromise)
+  public void start()
   {
     RouterBuilder.create(vertx, "src/main/resources/openapi3.yaml")
       .onSuccess(routerBuilder -> {
         System.out.println("Successfully created router builder with yaml");
         routerBuilder
           .operation("get-cats")
-          .handler(new CatGetHandler(catRepository))
+          .handler(catGetHandler)
           .failureHandler(exceptionHandler);
         routerBuilder
           .operation("post-cats")
-          .handler(new CatPostHandler(catRepository))
+          .handler(catPostHandler)
           .failureHandler(exceptionHandler);
         routerBuilder
           .operation("get-cats-id")
-          .handler(new CatGetByIdHandler(catRepository))
+          .handler(catGetByIdHandler)
           .failureHandler(exceptionHandler);
         routerBuilder
           .operation("put-cats-id")
-          .handler(new CatPutHandler(catRepository))
+          .handler(catPutHandler)
           .failureHandler(exceptionHandler);
         routerBuilder
           .operation("delete-cats-id")
-          .handler(new CatDeleteHandler(catRepository))
+          .handler(catDeleteHandler)
           .failureHandler(exceptionHandler);
 
         HttpServer server = vertx.createHttpServer().requestHandler(routerBuilder.createRouter());
 
-        server.listen(8400, res -> {
-          if (res.succeeded()) {
-            startPromise.complete();
-          }
-          else {
-            startPromise.fail(res.cause());
-          }
-        });
+        server.listen(8400);
       })
       .onFailure(err -> {
         throw new RuntimeException("Could not create router builder with yaml");

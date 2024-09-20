@@ -7,15 +7,15 @@ import ch.cat_api.catapi.util.CatMapper;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
+@Singleton
 public class CatPostHandler implements Handler<RoutingContext>
 {
-  private final CatRepository catRepository;
 
-  public CatPostHandler(final CatRepository catRepository)
-  {
-    this.catRepository = catRepository;
-  }
+  @Inject
+  public CatRepository catRepository;
 
   public void handle(final RoutingContext routingContext)
   {

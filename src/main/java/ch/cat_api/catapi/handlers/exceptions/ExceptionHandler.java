@@ -7,9 +7,11 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.validation.BodyProcessorException;
+import jakarta.inject.Singleton;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
 
+@Singleton
 public class ExceptionHandler implements Handler<RoutingContext>
 {
   private static final Logger logger = Logger.getLogger(ExceptionHandler.class);
@@ -40,7 +42,8 @@ public class ExceptionHandler implements Handler<RoutingContext>
       return;
     }
 
-    logger.log(Priority.ERROR, failure.getCause(), failure);
+
+    logger.log(Level.ERROR, failure.getCause(), failure);
 
     routingContext
       .response()

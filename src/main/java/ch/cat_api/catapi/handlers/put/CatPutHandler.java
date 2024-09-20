@@ -6,11 +6,12 @@ import ch.cat_api.catapi.util.CatMapper;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
+import jakarta.inject.Singleton;
 import org.bson.types.ObjectId;
 
+@Singleton
 public class CatPutHandler implements Handler<RoutingContext>
 {
-
   private final CatRepository catRepository;
 
   public CatPutHandler(final CatRepository catRepository)

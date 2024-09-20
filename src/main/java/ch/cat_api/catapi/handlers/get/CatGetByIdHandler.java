@@ -4,16 +4,17 @@ import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
 import ch.cat_api.catapi.repositories.CatRepository;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.bson.types.ObjectId;
 
+@Singleton
 public class CatGetByIdHandler implements Handler<RoutingContext>
 {
-  private final CatRepository catRepository;
 
-  public CatGetByIdHandler(final CatRepository catRepository)
-  {
-    this.catRepository = catRepository;
-  }
+  @Inject
+  public CatRepository catRepository;
+
   public void handle(final RoutingContext routingContext)
   {
     String id = routingContext.request().getParam("_id");

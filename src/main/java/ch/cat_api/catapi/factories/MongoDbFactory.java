@@ -4,15 +4,11 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClient;
+import jakarta.inject.Singleton;
 
+@Singleton
 public class MongoDbFactory
 {
-  private final Vertx vertx;
-
-  public MongoDbFactory(final Vertx vertx)
-  {
-    this.vertx = vertx;
-  }
 
   public Future<MongoClient> createClient()
   {
@@ -22,7 +18,7 @@ public class MongoDbFactory
         .put("port", 27017)
         .put("db_name", "cat_api");
 
-      MongoClient mongoClient = MongoClient.createShared(vertx, mongoConfig);
+      MongoClient mongoClient = MongoClient.createShared(Vertx.vertx(), mongoConfig);
 
       return Future.succeededFuture(mongoClient);
     }
