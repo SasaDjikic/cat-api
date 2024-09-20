@@ -1,45 +1,90 @@
 package ch.cat_api.catapi.repositories;
 
+import ch.cat_api.catapi.dtos.cat.requests.CatRequest;
+import ch.cat_api.catapi.factories.MongoDbFactory;
+import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
+import ch.cat_api.catapi.handlers.exceptions.NotFoundException;
+import ch.cat_api.catapi.util.CatMapper;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.mongo.MongoClient;
 import java.util.List;
 
 public class CatRepository
 {
-  private final MongoClient mongoClient;
+  private final MongoDbFactory mongoDbFactory;
 
-  public CatRepository(MongoClient mongoClient)
+  public CatRepository(final MongoDbFactory mongoDbFactory)
   {
-    this.mongoClient = mongoClient;
+    this.mongoDbFactory = mongoDbFactory;
   }
 
   public Future<List<JsonObject>> load()
   {
-    return mongoClient.find("cats", new JsonObject());
+    return mongoDbFactory.createClient()
+      .compose(mongoClient -> mongoClient.find("cats", new JsonObject())
+        .compose(res -> {
+          if (!res.isEmpty()) {
+            return Future.succeededFuture(res);
+          }
+          return Future.failedFuture(new NotFoundException());
+        }));
   }
 
   public Future<JsonObject> loadById(String id)
   {
     JsonObject query = new JsonObject().put("_id", id);
-    return mongoClient.findOne("cats", query, null);
+
+    return mongoDbFactory.createClient()
+      .compose(mongoClient -> mongoClient.findOne("cats", query, null)
+        .compose(res -> {
+          mongoClient.close();
+          if (res != null) {
+            return Future.succeededFuture(res);
+          }
+          return Future.failedFuture(new NotFoundException(id));
+        }));
   }
 
-  public Future<String> save(JsonObject cat)
+  public Future<String> save(CatRequest cat)
   {
-    return mongoClient.save("cats", cat);
+    return mongoDbFactory.createClient()
+      .compose(mongoClient -> {
+        try {
+          return mongoClient.save("cats", CatMapper.mapCatToJsonObject(cat))
+            .compose(res -> {
+              mongoClient.close();
+              if (res != null) {
+                return Future.succeededFuture(res);
+              }
+              return Future.failedFuture(new NotFoundException());
+            });
+        }
+        catch (BadRequestException e) {
+          return Future.failedFuture(e);
+        }
+      });
   }
 
-  public Future<Void> update(String id, JsonObject cat)
+  public Future<Void> update(String id, CatRequest cat)
   {
     JsonObject query = new JsonObject().put("_id", id);
-    JsonObject update = new JsonObject().put("$set", cat);
 
-    return mongoClient.updateCollection("cats", query, update).compose(res -> {
-      if (res.getDocModified() == 1) {
-        return Future.succeededFuture();
+    return mongoDbFactory.createClient().compose(mongoClient -> {
+      try {
+        JsonObject update = new JsonObject().put("$set", CatMapper.mapCatToJsonObject(cat));
+
+        return mongoClient.updateCollection("cats", query, update)
+          .compose(res -> {
+            mongoClient.close();
+            if (res.getDocModified() == 1) {
+              return Future.succeededFuture();
+            }
+            return Future.failedFuture(new NotFoundException(id));
+          });
       }
-      return Future.failedFuture("Update failed");
+      catch (BadRequestException e) {
+        return Future.failedFuture(e);
+      }
     });
   }
 
@@ -47,11 +92,13 @@ public class CatRepository
   {
     JsonObject query = new JsonObject().put("_id", id);
 
-    return mongoClient.removeDocument("cats", query).compose(res -> {
-      if (res.getRemovedCount() == 1) {
-        return Future.succeededFuture();
-      }
-      return Future.failedFuture("Delete failed");
-    });
+    return mongoDbFactory.createClient().compose(mongoClient -> mongoClient.removeDocument("cats", query)
+      .compose(res -> {
+        mongoClient.close();
+        if (res.getRemovedCount() == 1) {
+          return Future.succeededFuture();
+        }
+        return Future.failedFuture(new NotFoundException(id));
+      }));
   }
 }

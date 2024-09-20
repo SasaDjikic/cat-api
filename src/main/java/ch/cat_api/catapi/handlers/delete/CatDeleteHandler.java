@@ -1,8 +1,10 @@
 package ch.cat_api.catapi.handlers.delete;
 
+import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
 import ch.cat_api.catapi.repositories.CatRepository;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
+import org.bson.types.ObjectId;
 
 public class CatDeleteHandler implements Handler<RoutingContext>
 {
@@ -13,17 +15,17 @@ public class CatDeleteHandler implements Handler<RoutingContext>
     this.catRepository = catRepository;
   }
 
-  @Override
   public void handle(final RoutingContext routingContext)
   {
     String id = routingContext.request().getParam("_id");
 
+    if (!ObjectId.isValid(id)) {
+      routingContext.fail(new BadRequestException(id));
+      return;
+    }
+
     catRepository.delete(id)
       .onSuccess((res) -> routingContext.response().setStatusCode(204).end())
-      .onFailure(throwable -> {
-        //TODO deal with the exception
-        // Loggging ??
-        routingContext.response().setStatusCode(500).end("Failed to delete cat: " + throwable.getMessage());
-      });
+      .onFailure(routingContext::fail);
   }
 }

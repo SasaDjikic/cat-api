@@ -13,7 +13,6 @@ public class CatGetHandler implements Handler<RoutingContext>
     this.catRepository = catRepository;
   }
 
-  @Override
   public void handle(final RoutingContext routingContext)
   {
     catRepository.load()
@@ -21,11 +20,6 @@ public class CatGetHandler implements Handler<RoutingContext>
         routingContext.json(catResponses);
         routingContext.response().end();
       })
-      .onFailure(throwable -> {
-        //TODO deal with the exception
-        // Loggging ??
-        routingContext.response().setStatusCode(500).end("Failed to load cats");
-        System.out.println("failure");
-      });
+      .onFailure(routingContext::fail);
   }
 }

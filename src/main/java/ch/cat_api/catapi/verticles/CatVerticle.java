@@ -1,6 +1,7 @@
 package ch.cat_api.catapi.verticles;
 
 import ch.cat_api.catapi.handlers.delete.CatDeleteHandler;
+import ch.cat_api.catapi.handlers.exceptions.ExceptionHandler;
 import ch.cat_api.catapi.handlers.get.CatGetByIdHandler;
 import ch.cat_api.catapi.handlers.get.CatGetHandler;
 import ch.cat_api.catapi.handlers.post.CatPostHandler;
@@ -8,14 +9,16 @@ import ch.cat_api.catapi.handlers.put.CatPutHandler;
 import ch.cat_api.catapi.repositories.CatRepository;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
+import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.openapi.RouterBuilder;
 
 public class CatVerticle extends AbstractVerticle
 {
+  private final ExceptionHandler exceptionHandler;
   private final CatRepository catRepository;
 
-  public CatVerticle(final CatRepository catRepository)
-  {
+  public CatVerticle(final ExceptionHandler exceptionHandler, final CatRepository catRepository) {
+    this.exceptionHandler = exceptionHandler;
     this.catRepository = catRepository;
   }
 
@@ -24,61 +27,41 @@ public class CatVerticle extends AbstractVerticle
   {
     RouterBuilder.create(vertx, "src/main/resources/openapi3.yaml")
       .onSuccess(routerBuilder -> {
-        System.out.println("successfully loaded yaml");
+        System.out.println("Successfully created router builder with yaml");
         routerBuilder
           .operation("get-cats")
           .handler(new CatGetHandler(catRepository))
-          .failureHandler(routingContext -> {
-            // Handle failure
-
-            routingContext.response().setStatusCode(500).end("Internal Server error: " + routingContext.failure().getMessage());
-          });
+          .failureHandler(exceptionHandler);
         routerBuilder
           .operation("post-cats")
           .handler(new CatPostHandler(catRepository))
-          .failureHandler(routingContext -> {
-            // Handle failure
-
-            routingContext.response().setStatusCode(500).end("Internal Server error: " + routingContext.failure().getMessage());
-          });
+          .failureHandler(exceptionHandler);
         routerBuilder
           .operation("get-cats-id")
           .handler(new CatGetByIdHandler(catRepository))
-          .failureHandler(routingContext -> {
-            // Handle failure
-
-            routingContext.response().setStatusCode(500).end("Internal Server error: " + routingContext.failure().getMessage());
-          });
+          .failureHandler(exceptionHandler);
         routerBuilder
           .operation("put-cats-id")
           .handler(new CatPutHandler(catRepository))
-          .failureHandler(routingContext -> {
-            // Handle failure
-
-            routingContext.response().setStatusCode(500).end("Internal Server error: " + routingContext.failure().getMessage());
-          });
+          .failureHandler(exceptionHandler);
         routerBuilder
           .operation("delete-cats-id")
           .handler(new CatDeleteHandler(catRepository))
-          .failureHandler(routingContext -> {
-            // Handle failure
+          .failureHandler(exceptionHandler);
 
-            routingContext.response().setStatusCode(500).end("Internal Server error: " + routingContext.failure().getMessage());
-          });
+        HttpServer server = vertx.createHttpServer().requestHandler(routerBuilder.createRouter());
 
-        vertx.createHttpServer().requestHandler(routerBuilder.createRouter()).listen(8400, result -> {
-          if (result.succeeded()) {
+        server.listen(8400, res -> {
+          if (res.succeeded()) {
             startPromise.complete();
           }
           else {
-            startPromise.fail(result.cause());
+            startPromise.fail(res.cause());
           }
         });
-
       })
       .onFailure(err -> {
-        System.out.println("failure");
-        // Something went wrong during router builder initialization
+        throw new RuntimeException("Could not create router builder with yaml");
       });
   }
 }

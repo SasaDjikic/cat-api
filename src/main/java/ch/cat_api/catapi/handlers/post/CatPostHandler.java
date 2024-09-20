@@ -1,6 +1,9 @@
 package ch.cat_api.catapi.handlers.post;
 
+import ch.cat_api.catapi.dtos.cat.requests.CatRequest;
+import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
 import ch.cat_api.catapi.repositories.CatRepository;
+import ch.cat_api.catapi.util.CatMapper;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
@@ -14,20 +17,28 @@ public class CatPostHandler implements Handler<RoutingContext>
     this.catRepository = catRepository;
   }
 
-  @Override
   public void handle(final RoutingContext routingContext)
   {
     JsonObject cat = routingContext.body().asJsonObject();
 
-    catRepository.save(cat)
-      .onSuccess((voidResult) -> {
-        routingContext.json(cat);
-        routingContext.response().end();
-      })
-      .onFailure(throwable -> {
-        //TODO deal with the exception
-        // Loggging ??
-        routingContext.response().setStatusCode(500).end("Failed to load cats");
-      });
+    try {
+      cat.mapTo(CatRequest.class);
+    }
+    catch (Exception e) {
+      routingContext.fail(new BadRequestException());
+      return;
+    }
+
+    try {
+      catRepository.save(CatMapper.mapCatToRequest(cat))
+        .onSuccess((res) -> {
+          routingContext.json(cat);
+          routingContext.response().end();
+        })
+        .onFailure(routingContext::fail);
+    }
+    catch (BadRequestException e) {
+      routingContext.fail(e);
+    }
   }
 }
