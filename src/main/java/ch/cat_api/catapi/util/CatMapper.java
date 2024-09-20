@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.vertx.core.json.JsonObject;
 
+//TODO not static
 public class CatMapper
 {
   public static CatRequest mapCatToRequest(JsonObject cat) throws BadRequestException

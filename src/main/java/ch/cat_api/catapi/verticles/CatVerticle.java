@@ -15,8 +15,6 @@ import jakarta.inject.Singleton;
 @Singleton
 public class CatVerticle extends AbstractVerticle
 {
-
-
   public final ExceptionHandler exceptionHandler;
   public final CatGetByIdHandler catGetByIdHandler;
   public final CatGetHandler catGetHandler;

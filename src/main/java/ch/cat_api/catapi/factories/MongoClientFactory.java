@@ -1,16 +1,17 @@
 package ch.cat_api.catapi.factories;
 
-import io.vertx.core.Future;
+import io.micronaut.context.annotation.Factory;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClient;
 import jakarta.inject.Singleton;
 
-@Singleton
-public class MongoDbFactory
+@Factory
+public class MongoClientFactory
 {
 
-  public Future<MongoClient> createClient()
+  @Singleton
+  public MongoClient createClient()
   {
     try {
       JsonObject mongoConfig = new JsonObject()
@@ -18,12 +19,10 @@ public class MongoDbFactory
         .put("port", 27017)
         .put("db_name", "cat_api");
 
-      MongoClient mongoClient = MongoClient.createShared(Vertx.vertx(), mongoConfig);
-
-      return Future.succeededFuture(mongoClient);
+      return MongoClient.createShared(Vertx.vertx(), mongoConfig);
     }
     catch (Exception e) {
-      return Future.failedFuture("failed to create mongo client");
+      throw new RuntimeException(e);
     }
   }
 }

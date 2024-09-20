@@ -3,7 +3,9 @@ package ch.cat_api.catapi.handlers.exceptions;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
+import static io.netty.handler.codec.http.HttpResponseStatus.SERVICE_UNAVAILABLE;
 
+import com.mongodb.MongoTimeoutException;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.validation.BodyProcessorException;
@@ -29,6 +31,15 @@ public class ExceptionHandler implements Handler<RoutingContext>
         .response()
         .setStatusCode(NOT_FOUND.code())
         .setStatusMessage(NOT_FOUND.reasonPhrase())
+        .end(failure.getMessage());
+      return;
+    }
+
+    if (failure instanceof MongoTimeoutException) {
+      routingContext
+        .response()
+        .setStatusCode(SERVICE_UNAVAILABLE.code())
+        .setStatusMessage(SERVICE_UNAVAILABLE.reasonPhrase())
         .end(failure.getMessage());
       return;
     }
