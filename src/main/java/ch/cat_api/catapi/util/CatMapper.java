@@ -5,11 +5,13 @@ import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.vertx.core.json.JsonObject;
+import jakarta.inject.Singleton;
 
-//TODO not static
+// TODO CatMapper TEST
+@Singleton
 public class CatMapper
 {
-  public static CatRequest mapCatToRequest(JsonObject cat) throws BadRequestException
+  public CatRequest mapCatToRequest(JsonObject cat) throws BadRequestException
   {
     try {
       return cat.mapTo(CatRequest.class);
@@ -19,7 +21,7 @@ public class CatMapper
     }
   }
 
-  public static JsonObject mapCatToJsonObject(CatRequest cat) throws BadRequestException
+  public JsonObject mapCatToJsonObject(CatRequest cat) throws BadRequestException
   {
     try {
       final ObjectMapper objectMapper = new ObjectMapper();

@@ -15,11 +15,13 @@ import java.util.List;
 public class CatRepository
 {
   private final MongoClient mongoClient;
+  private final CatMapper catMapper;
 
   @Inject
-  public CatRepository(final MongoClient mongoClient)
+  public CatRepository(final MongoClient mongoClient, final CatMapper catMapper)
   {
     this.mongoClient = mongoClient;
+    this.catMapper = catMapper;
   }
 
   public Future<List<JsonObject>> load()
@@ -49,7 +51,7 @@ public class CatRepository
   public Future<String> save(CatRequest cat)
   {
     try {
-      return mongoClient.save("cats", CatMapper.mapCatToJsonObject(cat))
+      return mongoClient.save("cats", catMapper.mapCatToJsonObject(cat))
         .compose(res -> {
           if (res != null) {
             return Future.succeededFuture(res);
@@ -67,7 +69,7 @@ public class CatRepository
     JsonObject query = new JsonObject().put("_id", id);
 
     try {
-      JsonObject update = new JsonObject().put("$set", CatMapper.mapCatToJsonObject(cat));
+      JsonObject update = new JsonObject().put("$set", catMapper.mapCatToJsonObject(cat));
 
       return mongoClient.updateCollection("cats", query, update)
         .compose(res -> {

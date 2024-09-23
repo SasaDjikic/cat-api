@@ -12,7 +12,7 @@ import org.bson.types.ObjectId;
 public class CatDeleteHandler implements Handler<RoutingContext>
 {
 
-  public final CatRepository catRepository;
+  private final CatRepository catRepository;
 
   @Inject
   public CatDeleteHandler(final CatRepository catRepository)

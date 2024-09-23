@@ -12,8 +12,13 @@ import org.bson.types.ObjectId;
 public class CatGetByIdHandler implements Handler<RoutingContext>
 {
 
+  private final CatRepository catRepository;
+
   @Inject
-  public CatRepository catRepository;
+  public CatGetByIdHandler(final CatRepository catRepository)
+  {
+    this.catRepository = catRepository;
+  }
 
   public void handle(final RoutingContext routingContext)
   {

@@ -1,0 +1,10 @@
+<configuration>
+  <root level="ERROR">
+    <appender-ref ref="STDOUT"/>
+  </root>
+
+  <!-- Suppress DEBUG logging from specific packages -->
+  <logger name="io.micronaut.context" level="ERROR"/>
+  <logger name="io.netty.util.internal" level="ERROR"/>
+  <logger name="io.vertx.core.logging" level="ERROR"/>
+</configuration>

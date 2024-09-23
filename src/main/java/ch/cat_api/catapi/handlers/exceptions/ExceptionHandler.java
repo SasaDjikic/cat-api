@@ -53,7 +53,6 @@ public class ExceptionHandler implements Handler<RoutingContext>
       return;
     }
 
-
     logger.log(Level.ERROR, failure.getCause(), failure);
 
     routingContext

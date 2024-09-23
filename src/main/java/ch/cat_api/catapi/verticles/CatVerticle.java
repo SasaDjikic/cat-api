@@ -44,7 +44,7 @@ public class CatVerticle extends AbstractVerticle
   {
     RouterBuilder.create(vertx, "src/main/resources/openapi3.yaml")
       .onSuccess(routerBuilder -> {
-        System.out.println("Successfully created router builder with yaml");
+        System.out.println("Router builder successfully created");
         routerBuilder
           .operation("get-cats")
           .handler(catGetHandler)
@@ -71,7 +71,7 @@ public class CatVerticle extends AbstractVerticle
         server.listen(8400);
       })
       .onFailure(err -> {
-        throw new RuntimeException("Could not create router builder with yaml");
+        throw new RuntimeException("Router builder failed to created");
       });
   }
 }

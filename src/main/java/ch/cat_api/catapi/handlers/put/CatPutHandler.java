@@ -6,6 +6,7 @@ import ch.cat_api.catapi.util.CatMapper;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.bson.types.ObjectId;
 
@@ -13,10 +14,13 @@ import org.bson.types.ObjectId;
 public class CatPutHandler implements Handler<RoutingContext>
 {
   private final CatRepository catRepository;
+  private final CatMapper catMapper;
 
-  public CatPutHandler(final CatRepository catRepository)
+  @Inject
+  public CatPutHandler(final CatRepository catRepository, final CatMapper catMapper)
   {
     this.catRepository = catRepository;
+    this.catMapper = catMapper;
   }
 
   public void handle(final RoutingContext routingContext)
@@ -30,7 +34,7 @@ public class CatPutHandler implements Handler<RoutingContext>
     JsonObject cat = routingContext.body().asJsonObject();
 
     try {
-      catRepository.update(id, CatMapper.mapCatToRequest(cat))
+      catRepository.update(id, catMapper.mapCatToRequest(cat))
         .onSuccess((mongo) -> {
           cat.put("_id", id);
           routingContext.json(cat);

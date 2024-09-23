@@ -1,6 +1,5 @@
 package ch.cat_api.catapi.handlers.post;
 
-import ch.cat_api.catapi.dtos.cat.requests.CatRequest;
 import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
 import ch.cat_api.catapi.repositories.CatRepository;
 import ch.cat_api.catapi.util.CatMapper;
@@ -14,24 +13,24 @@ import jakarta.inject.Singleton;
 public class CatPostHandler implements Handler<RoutingContext>
 {
 
+  private final CatRepository catRepository;
+  private final CatMapper catMapper;
+
   @Inject
-  public CatRepository catRepository;
+  public CatPostHandler(final CatRepository catRepository, final CatMapper catMapper)
+  {
+    this.catRepository = catRepository;
+    this.catMapper = catMapper;
+  }
 
   public void handle(final RoutingContext routingContext)
   {
     JsonObject cat = routingContext.body().asJsonObject();
 
     try {
-      cat.mapTo(CatRequest.class);
-    }
-    catch (Exception e) {
-      routingContext.fail(new BadRequestException());
-      return;
-    }
-
-    try {
-      catRepository.save(CatMapper.mapCatToRequest(cat))
+      catRepository.save(catMapper.mapCatToRequest(cat))
         .onSuccess((res) -> {
+          cat.put("_id", res);
           routingContext.json(cat);
           routingContext.response().end();
         })
