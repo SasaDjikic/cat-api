@@ -1,6 +1,7 @@
 package ch.cat_api.catapi.dtos.owner;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -18,7 +19,8 @@ class OwnerTest
   private OwnerService mockOwnerService;
 
   @BeforeEach
-  void setup() {
+  void setup()
+  {
     mockOwnerService = mock(OwnerService.class);
     owner = new Owner(mockOwnerService);
   }
@@ -26,15 +28,14 @@ class OwnerTest
   @Test
   public void testGetAllCatsReturnsResultOfOwnerService()
   {
-    final String buyer = "Jeff";
-    when(mockOwnerService.getAllCats(buyer))
+    when(mockOwnerService.getAllCats(anyString()))
       .thenReturn(Future.succeededFuture(List.of(new JsonObject("{}"))));
 
-    final List<JsonObject> cats = owner.getAllCats(buyer).result();
+    final List<JsonObject> cats = owner.getAllCats(anyString()).result();
 
     assertEquals(1, cats.size());
     assertNotNull(cats);
     assertNotNull(cats.get(0));
-    verify(mockOwnerService, times(1)).getAllCats(buyer);
+    verify(mockOwnerService, times(1)).getAllCats(anyString());
   }
 }
