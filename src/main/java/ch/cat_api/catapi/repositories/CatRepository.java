@@ -35,6 +35,19 @@ public class CatRepository
       });
   }
 
+  public Future<List<JsonObject>> loadAllByBuyer(String buyer)
+  {
+    JsonObject query = new JsonObject().put("buyer", buyer);
+
+    return mongoClient.find("cats", query)
+      .compose(res -> {
+        if (res != null) {
+          return Future.succeededFuture(res);
+        }
+        return Future.failedFuture(new NotFoundException());
+      });
+  }
+
   public Future<JsonObject> loadById(String id)
   {
     JsonObject query = new JsonObject().put("_id", id);
@@ -51,7 +64,7 @@ public class CatRepository
   public Future<String> save(CatRequest cat)
   {
     try {
-      return mongoClient.save("cats", catMapper.mapCatToJsonObject(cat))
+      return mongoClient.save("cats", catMapper.mapRequestToJsonObject(cat))
         .compose(res -> {
           if (res != null) {
             return Future.succeededFuture(res);
@@ -69,7 +82,7 @@ public class CatRepository
     JsonObject query = new JsonObject().put("_id", id);
 
     try {
-      JsonObject update = new JsonObject().put("$set", catMapper.mapCatToJsonObject(cat));
+      JsonObject update = new JsonObject().put("$set", catMapper.mapRequestToJsonObject(cat));
 
       return mongoClient.updateCollection("cats", query, update)
         .compose(res -> {

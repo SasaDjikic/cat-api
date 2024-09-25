@@ -34,7 +34,7 @@ public class CatPutHandler implements Handler<RoutingContext>
     JsonObject cat = routingContext.body().asJsonObject();
 
     try {
-      catRepository.update(id, catMapper.mapCatToRequest(cat))
+      catRepository.update(id, catMapper.mapJsonObjectToRequest(cat))
         .onSuccess((mongo) -> {
           cat.put("_id", id);
           routingContext.json(cat);

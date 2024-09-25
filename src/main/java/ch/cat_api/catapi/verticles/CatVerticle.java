@@ -1,5 +1,6 @@
 package ch.cat_api.catapi.verticles;
 
+import ch.cat_api.catapi.dtos.owner.Owner;
 import ch.cat_api.catapi.handlers.delete.CatDeleteHandler;
 import ch.cat_api.catapi.handlers.exceptions.ExceptionHandler;
 import ch.cat_api.catapi.handlers.get.CatGetByIdHandler;
@@ -15,12 +16,13 @@ import jakarta.inject.Singleton;
 @Singleton
 public class CatVerticle extends AbstractVerticle
 {
-  public final ExceptionHandler exceptionHandler;
-  public final CatGetByIdHandler catGetByIdHandler;
-  public final CatGetHandler catGetHandler;
-  public final CatPostHandler catPostHandler;
-  public final CatPutHandler catPutHandler;
-  public final CatDeleteHandler catDeleteHandler;
+  private final ExceptionHandler exceptionHandler;
+  private final CatGetByIdHandler catGetByIdHandler;
+  private final CatGetHandler catGetHandler;
+  private final CatPostHandler catPostHandler;
+  private final CatPutHandler catPutHandler;
+  private final CatDeleteHandler catDeleteHandler;
+  private final Owner owner;
 
   @Inject
   public CatVerticle(
@@ -29,7 +31,9 @@ public class CatVerticle extends AbstractVerticle
     final CatGetHandler catGetHandler,
     final CatPostHandler catPostHandler,
     final CatPutHandler catPutHandler,
-    final CatDeleteHandler catDeleteHandler
+    final CatDeleteHandler catDeleteHandler,
+    // TODO OWNER
+    final Owner owner
   )
   {
     this.exceptionHandler = exceptionHandler;
@@ -38,6 +42,7 @@ public class CatVerticle extends AbstractVerticle
     this.catPostHandler = catPostHandler;
     this.catPutHandler = catPutHandler;
     this.catDeleteHandler = catDeleteHandler;
+    this.owner = owner;
   }
 
   public void start()
@@ -67,6 +72,13 @@ public class CatVerticle extends AbstractVerticle
           .failureHandler(exceptionHandler);
 
         HttpServer server = vertx.createHttpServer().requestHandler(routerBuilder.createRouter());
+
+        // TODO Owner with getAllCats
+        owner.getAllCats("Jeff").onComplete(res -> {
+          if (res.succeeded()) {
+            System.out.println(res.result());
+          }
+        });
 
         server.listen(8400);
       })

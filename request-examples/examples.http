@@ -18,13 +18,13 @@ Content-Type: application/json
 
 ### Put cat
 
-PUT http://127.0.0.1:8400/cats/66f12b0a3655d07a490908a6
+PUT http://127.0.0.1:8400/cats/66f12b943655d07a490908a7
 Content-Type: application/json
 
 {
   "name": "Stefan",
   "age": 6,
-  "buyer": "John"
+  "buyer": "Jeff"
 }
 
 ### Delete cat

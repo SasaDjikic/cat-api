@@ -7,11 +7,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vertx.core.json.JsonObject;
 import jakarta.inject.Singleton;
 
-// TODO CatMapper TEST
 @Singleton
 public class CatMapper
 {
-  public CatRequest mapCatToRequest(JsonObject cat) throws BadRequestException
+  public CatRequest mapJsonObjectToRequest(JsonObject cat) throws BadRequestException
   {
     try {
       return cat.mapTo(CatRequest.class);
@@ -21,7 +20,7 @@ public class CatMapper
     }
   }
 
-  public JsonObject mapCatToJsonObject(CatRequest cat) throws BadRequestException
+  public JsonObject mapRequestToJsonObject(CatRequest cat) throws BadRequestException
   {
     try {
       final ObjectMapper objectMapper = new ObjectMapper();
