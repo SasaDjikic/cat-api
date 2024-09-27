@@ -1,6 +1,7 @@
 package ch.cat_api.catapi.repositories;
 
 import ch.cat_api.catapi.dtos.cat.requests.CatRequest;
+import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
 import ch.cat_api.catapi.handlers.exceptions.NotFoundException;
 import ch.cat_api.catapi.util.CatMapper;
 import io.vertx.core.Future;
@@ -63,7 +64,7 @@ public class CatRepository
       });
   }
 
-  public Future<String> save(CatRequest cat)
+  public Future<String> save(CatRequest cat) throws BadRequestException
   {
     try {
       return mongoClient

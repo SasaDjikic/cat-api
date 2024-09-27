@@ -32,7 +32,6 @@ public class CatVerticle extends AbstractVerticle
     final CatPostHandler catPostHandler,
     final CatPutHandler catPutHandler,
     final CatDeleteHandler catDeleteHandler,
-    // TODO OWNER
     final Owner owner
   )
   {
