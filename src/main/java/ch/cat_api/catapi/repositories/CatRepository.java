@@ -1,7 +1,6 @@
 package ch.cat_api.catapi.repositories;
 
 import ch.cat_api.catapi.dtos.cat.requests.CatRequest;
-import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
 import ch.cat_api.catapi.handlers.exceptions.NotFoundException;
 import ch.cat_api.catapi.util.CatMapper;
 import io.vertx.core.Future;
@@ -26,7 +25,8 @@ public class CatRepository
 
   public Future<List<JsonObject>> load()
   {
-    return mongoClient.find("cats", new JsonObject())
+    return mongoClient
+      .find("cats", new JsonObject())
       .compose(res -> {
         if (!res.isEmpty()) {
           return Future.succeededFuture(res);
@@ -39,9 +39,10 @@ public class CatRepository
   {
     JsonObject query = new JsonObject().put("buyer", buyer);
 
-    return mongoClient.find("cats", query)
+    return mongoClient
+      .find("cats", query)
       .compose(res -> {
-        if (res != null) {
+        if (!res.isEmpty()) {
           return Future.succeededFuture(res);
         }
         return Future.failedFuture(new NotFoundException());
@@ -52,7 +53,8 @@ public class CatRepository
   {
     JsonObject query = new JsonObject().put("_id", id);
 
-    return mongoClient.findOne("cats", query, null)
+    return mongoClient
+      .findOne("cats", query, null)
       .compose(res -> {
         if (res != null) {
           return Future.succeededFuture(res);
@@ -64,7 +66,8 @@ public class CatRepository
   public Future<String> save(CatRequest cat)
   {
     try {
-      return mongoClient.save("cats", catMapper.mapRequestToJsonObject(cat))
+      return mongoClient
+        .save("cats", catMapper.mapRequestToJsonObject(cat))
         .compose(res -> {
           if (res != null) {
             return Future.succeededFuture(res);
@@ -72,7 +75,7 @@ public class CatRepository
           return Future.failedFuture(new NotFoundException());
         });
     }
-    catch (BadRequestException e) {
+    catch (Exception e) {
       return Future.failedFuture(e);
     }
   }
@@ -84,7 +87,8 @@ public class CatRepository
     try {
       JsonObject update = new JsonObject().put("$set", catMapper.mapRequestToJsonObject(cat));
 
-      return mongoClient.updateCollection("cats", query, update)
+      return mongoClient
+        .updateCollection("cats", query, update)
         .compose(res -> {
           if (res.getDocModified() == 1) {
             return Future.succeededFuture();
@@ -92,7 +96,7 @@ public class CatRepository
           return Future.failedFuture(new NotFoundException(id));
         });
     }
-    catch (BadRequestException e) {
+    catch (Exception e) {
       return Future.failedFuture(e);
     }
   }
@@ -101,7 +105,8 @@ public class CatRepository
   {
     JsonObject query = new JsonObject().put("_id", id);
 
-    return mongoClient.removeDocument("cats", query)
+    return mongoClient
+      .removeDocument("cats", query)
       .compose(res -> {
         if (res.getRemovedCount() == 1) {
           return Future.succeededFuture();

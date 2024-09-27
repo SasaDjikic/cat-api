@@ -73,7 +73,6 @@ public class CatVerticle extends AbstractVerticle
 
         HttpServer server = vertx.createHttpServer().requestHandler(routerBuilder.createRouter());
 
-        // TODO Owner with getAllCats
         owner.getAllCats("Jeff").onComplete(res -> {
           if (res.succeeded()) {
             System.out.println(res.result());
