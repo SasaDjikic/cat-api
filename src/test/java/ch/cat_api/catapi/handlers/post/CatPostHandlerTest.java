@@ -67,7 +67,7 @@ class CatPostHandlerTest
   }
 
   @Test
-  void testPutOfCatPutHandlerThrowsException() throws BadRequestException
+  void testPostOfCatPostHandlerThrowsException() throws BadRequestException
   {
     final CatRequest catRequest = new CatRequest("Jeff", 2, "Peter");
     final JsonObject jsonObject = new JsonObject().put("name", "Jeff")
