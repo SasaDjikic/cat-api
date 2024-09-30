@@ -1,6 +1,5 @@
 package ch.cat_api.catapi.handlers.post;
 
-import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
 import ch.cat_api.catapi.repositories.CatRepository;
 import ch.cat_api.catapi.util.CatMapper;
 import io.vertx.core.Handler;
@@ -36,7 +35,7 @@ public class CatPostHandler implements Handler<RoutingContext>
         })
         .onFailure(routingContext::fail);
     }
-    catch (BadRequestException e) {
+    catch (Exception e) {
       routingContext.fail(e);
     }
   }
