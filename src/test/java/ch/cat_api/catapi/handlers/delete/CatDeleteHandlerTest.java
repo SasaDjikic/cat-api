@@ -43,7 +43,7 @@ class CatDeleteHandlerTest
   }
 
   @Test
-  void testPutReturnsResultOfCatDeleteHandler()
+  void testDeleteReturnsResultOfCatDeleteHandler()
   {
     final String id = "66f12b0a3655d07a490908a6";
 
