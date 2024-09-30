@@ -64,7 +64,7 @@ class CatGetByIdHandlerTest
   }
 
   @Test
-  void testGetByIdOfCatGetHandlerHasInvalidObjectId()
+  void testGetByIdOfCatGetByIdHandlerHasInvalidObjectId()
   {
     final String id = "invalid-id";
 
