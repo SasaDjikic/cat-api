@@ -14,7 +14,7 @@ public class MongoClientFactory
   public MongoClient createClient()
   {
     try {
-      JsonObject mongoConfig = new JsonObject()
+      final JsonObject mongoConfig = new JsonObject()
         .put("host", "localhost")
         .put("port", 27017)
         .put("db_name", "cat_api");
@@ -22,7 +22,7 @@ public class MongoClientFactory
       return MongoClient.createShared(Vertx.vertx(), mongoConfig);
     }
     catch (Exception e) {
-      throw new RuntimeException(e);
+      throw new InternalError(e);
     }
   }
 }

@@ -26,7 +26,7 @@ class OwnerTest
   }
 
   @Test
-  public void testGetAllCatsReturnsResultOfOwnerService()
+  void testGetAllCatsReturnsResultOfOwnerService()
   {
     when(mockOwnerService.getAllCats(anyString()))
       .thenReturn(Future.succeededFuture(List.of(new JsonObject("{}"))));

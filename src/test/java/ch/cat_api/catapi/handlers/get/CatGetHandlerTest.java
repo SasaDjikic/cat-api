@@ -33,7 +33,7 @@ class CatGetHandlerTest
   }
 
   @Test
-  public void testLoadReturnsResultOfCatGetHandler()
+  void testLoadReturnsResultOfCatGetHandler()
   {
     List<JsonObject> response = List.of(new JsonObject("{}"));
 
@@ -51,7 +51,7 @@ class CatGetHandlerTest
   }
 
   @Test
-  public void testLoadOfCatGetHandlerFails()
+  void testLoadOfCatGetHandlerFails()
   {
     final NotFoundException notFoundException = new NotFoundException();
 

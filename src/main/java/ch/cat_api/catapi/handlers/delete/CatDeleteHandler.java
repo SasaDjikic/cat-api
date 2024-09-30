@@ -22,7 +22,7 @@ public class CatDeleteHandler implements Handler<RoutingContext>
 
   public void handle(final RoutingContext routingContext)
   {
-    String id = routingContext.request().getParam("_id");
+    final String id = routingContext.request().getParam("_id");
 
     if (!ObjectId.isValid(id)) {
       routingContext.fail(new BadRequestException(id));
@@ -30,7 +30,7 @@ public class CatDeleteHandler implements Handler<RoutingContext>
     }
 
     catRepository.delete(id)
-      .onSuccess((res) -> routingContext.response().setStatusCode(204).end())
+      .onSuccess(res -> routingContext.response().setStatusCode(204).end())
       .onFailure(routingContext::fail);
   }
 }

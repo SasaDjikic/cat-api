@@ -25,11 +25,11 @@ public class CatPostHandler implements Handler<RoutingContext>
 
   public void handle(final RoutingContext routingContext)
   {
-    JsonObject cat = routingContext.body().asJsonObject();
+    final JsonObject cat = routingContext.body().asJsonObject();
 
     try {
       catRepository.save(catMapper.mapJsonObjectToRequest(cat))
-        .onSuccess((res) -> {
+        .onSuccess(res -> {
           cat.put("_id", res);
           routingContext.json(cat);
           routingContext.response().end();

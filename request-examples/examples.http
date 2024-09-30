@@ -4,7 +4,7 @@ GET http://127.0.0.1:8400/cats
 
 ### Get cat by id
 
-GET http://127.0.0.1:8400/cats/66f12b0a3655d07a490908a6
+GET http://127.0.0.1:8400/cats/66f12a9ceab01e13cde2ecb1
 
 ### Create cat
 
@@ -18,7 +18,7 @@ Content-Type: application/json
 
 ### Put cat
 
-PUT http://127.0.0.1:8400/cats/66f12b943655d07a490908a7
+PUT http://127.0.0.1:8400/cats/66f12a9ceab01e13cde2ecb1
 Content-Type: application/json
 
 {

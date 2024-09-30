@@ -38,7 +38,7 @@ public class CatRepository
 
   public Future<List<JsonObject>> loadAllByBuyer(String buyer)
   {
-    JsonObject query = new JsonObject().put("buyer", buyer);
+    final JsonObject query = new JsonObject().put("buyer", buyer);
 
     return mongoClient
       .find("cats", query)
@@ -52,7 +52,7 @@ public class CatRepository
 
   public Future<JsonObject> loadById(String id)
   {
-    JsonObject query = new JsonObject().put("_id", id);
+    final JsonObject query = new JsonObject().put("_id", id);
 
     return mongoClient
       .findOne("cats", query, null)
@@ -83,10 +83,10 @@ public class CatRepository
 
   public Future<Void> update(String id, CatRequest cat)
   {
-    JsonObject query = new JsonObject().put("_id", id);
+    final JsonObject query = new JsonObject().put("_id", id);
 
     try {
-      JsonObject update = new JsonObject().put("$set", catMapper.mapRequestToJsonObject(cat));
+      final JsonObject update = new JsonObject().put("$set", catMapper.mapRequestToJsonObject(cat));
 
       return mongoClient
         .updateCollection("cats", query, update)
@@ -104,7 +104,7 @@ public class CatRepository
 
   public Future<Void> delete(String id)
   {
-    JsonObject query = new JsonObject().put("_id", id);
+    final JsonObject query = new JsonObject().put("_id", id);
 
     return mongoClient
       .removeDocument("cats", query)

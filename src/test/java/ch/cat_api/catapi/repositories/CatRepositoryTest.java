@@ -43,7 +43,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testLoadReturnsResultOfCatRepository()
+  void testLoadReturnsResultOfCatRepository()
   {
     final String collection = "cats";
 
@@ -61,7 +61,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testLoadOfCatRepositoryFails()
+  void testLoadOfCatRepositoryFails()
   {
     final String collection = "cats";
 
@@ -76,7 +76,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testLoadAllByBuyerReturnsResultOfCatRepository()
+  void testLoadAllByBuyerReturnsResultOfCatRepository()
   {
     final String buyer = "Jeff";
     final String collection = "cats";
@@ -95,7 +95,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testLoadAllByBuyerOfCatRepositoryFails()
+  void testLoadAllByBuyerOfCatRepositoryFails()
   {
     final String buyer = "Jeff";
     final String collection = "cats";
@@ -112,7 +112,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testLoadByIdReturnsResultOfCatRepository()
+  void testLoadByIdReturnsResultOfCatRepository()
   {
     final String id = "66f12b0a3655d07a490908a6";
     final String collection = "cats";
@@ -129,7 +129,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testLoadByIdOfCatRepositoryFails()
+  void testLoadByIdOfCatRepositoryFails()
   {
     final String id = "66f12b0a3655d07a490908a6";
     final String collection = "cats";
@@ -146,7 +146,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testSaveReturnsResultOfCatRepository() throws BadRequestException
+  void testSaveReturnsResultOfCatRepository() throws BadRequestException
   {
     final String collection = "cats";
     final CatRequest cat = new CatRequest("Jeff", 2, "Peter");
@@ -165,7 +165,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testSaveOfCatRepositoryThrowsNullPointerException() throws BadRequestException
+  void testSaveOfCatRepositoryThrowsNullPointerException() throws BadRequestException
   {
     final String collection = "cats";
     final CatRequest cat = new CatRequest("Jeff", 2, "Peter");
@@ -184,7 +184,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testSaveOfCatRepositoryThrowsBadRequestException() throws BadRequestException
+  void testSaveOfCatRepositoryThrowsBadRequestException() throws BadRequestException
   {
     final CatRequest cat = new CatRequest("Jeff", 2, "Peter");
 
@@ -199,7 +199,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testSaveOfCatRepositoryFails() throws BadRequestException
+  void testSaveOfCatRepositoryFails() throws BadRequestException
   {
     final String collection = "cats";
     final CatRequest cat = new CatRequest("Jeff", 2, "Peter");
@@ -218,7 +218,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testUpdateReturnsResultOfCatRepository() throws BadRequestException
+  void testUpdateReturnsResultOfCatRepository() throws BadRequestException
   {
     final CatRequest catRequest = new CatRequest("Jeff", 2, "Peter");
     final String id = "66f12b0a3655d07a490908a6";
@@ -242,7 +242,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testUpdateOfCatRepositoryThrowsNullPointerException() throws BadRequestException
+  void testUpdateOfCatRepositoryThrowsNullPointerException() throws BadRequestException
   {
     final CatRequest catRequest = new CatRequest("Jeff", 2, "Peter");
     final String id = "66f12b0a3655d07a490908a6";
@@ -264,7 +264,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testUpdateOfCatRepositoryThrowsBadRequestException() throws BadRequestException
+  void testUpdateOfCatRepositoryThrowsBadRequestException() throws BadRequestException
   {
     final CatRequest catRequest = new CatRequest("Jeff", 2, "Peter");
     final String id = "66f12b0a3655d07a490908a6";
@@ -280,7 +280,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testUpdateOfCatRepositoryFails() throws BadRequestException
+  void testUpdateOfCatRepositoryFails() throws BadRequestException
   {
     final CatRequest catRequest = new CatRequest("Jeff", 2, "Peter");
     final String id = "66f12b0a3655d07a490908a6";
@@ -304,7 +304,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testDeleteReturnsResultOfCatRepository()
+  void testDeleteReturnsResultOfCatRepository()
   {
     final String id = "66f12b0a3655d07a490908a6";
     final String collection = "cats";
@@ -323,7 +323,7 @@ class CatRepositoryTest
   }
 
   @Test
-  public void testDeleteOfCatRepositoryFails()
+  void testDeleteOfCatRepositoryFails()
   {
     final String id = "66f12b0a3655d07a490908a6";
     final String collection = "cats";

@@ -22,7 +22,7 @@ public class CatGetByIdHandler implements Handler<RoutingContext>
 
   public void handle(final RoutingContext routingContext)
   {
-    String id = routingContext.request().getParam("_id");
+    final String id = routingContext.request().getParam("_id");
 
     if (!ObjectId.isValid(id)) {
       routingContext.fail(new BadRequestException(id));

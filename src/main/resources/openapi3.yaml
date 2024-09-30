@@ -54,6 +54,8 @@ paths:
           description: Service Unavailable - ex. database down
         '400':
           description: Bad Request - ex. no valid request given
+        '404':
+          description: Not Found - entry not found, id not found
       tags:
         - cat-api
     parameters: [ ]

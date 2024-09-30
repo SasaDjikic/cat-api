@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import ch.cat_api.catapi.dtos.cat.requests.CatRequest;
 import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vertx.core.json.JsonObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,22 +17,24 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class CatMapperTest
+class CatMapperTest
 {
   private CatMapper catMapper;
   private CatRequest mockCatRequest;
   private JsonObject mockJsonObject;
+  private ObjectMapper mockObjectMapper;
 
   @BeforeEach
   void setup()
   {
     mockCatRequest = mock(CatRequest.class);
     mockJsonObject = mock(JsonObject.class);
-    catMapper = new CatMapper();
+    mockObjectMapper = mock(ObjectMapper.class);
+    catMapper = new CatMapper(mockObjectMapper);
   }
 
   @Test
-  public void testMapJsonObjectToRequestReturnsResultOfCatMapper() throws BadRequestException
+  void testMapJsonObjectToRequestReturnsResultOfCatMapper() throws BadRequestException
   {
     final Class<CatRequest> catRequestClass = CatRequest.class;
 
@@ -45,7 +48,7 @@ public class CatMapperTest
   }
 
   @Test
-  public void testValidCatRequestReturnsPopulatedJsonObject() throws BadRequestException
+  void testValidCatRequestReturnsPopulatedJsonObject() throws BadRequestException
   {
     when(mockCatRequest.getName()).thenReturn("Alfred");
     when(mockCatRequest.getAge()).thenReturn(2);
@@ -59,13 +62,13 @@ public class CatMapperTest
   }
 
   @Test
-  public void testNullCatRequest()
+  void testNullCatRequest()
   {
     assertThrows(BadRequestException.class, () -> catMapper.mapRequestToJsonObject(null));
   }
 
   @Test
-  public void testValidJsonObjectReturnsPopulatedCatRequest() throws BadRequestException
+  void testValidJsonObjectReturnsPopulatedCatRequest() throws BadRequestException
   {
     mockJsonObject = mock(JsonObject.class);
 
@@ -81,7 +84,7 @@ public class CatMapperTest
   }
 
   @Test
-  public void testNullJsonObject()
+  void testNullJsonObject()
   {
     assertThrows(BadRequestException.class, () -> catMapper.mapJsonObjectToRequest(null));
   }
