@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
+import ch.cat_api.catapi.handlers.exceptions.NotFoundException;
 import ch.cat_api.catapi.repositories.CatRepository;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerRequest;
@@ -76,5 +77,22 @@ class CatDeleteHandlerTest
 
     verify(mockRoutingContext, times(2)).request();
     verify(mockRoutingContext, times(1)).fail(any(BadRequestException.class));
+  }
+
+  @Test
+  void testDeleteOfCatRepositoryFails()
+  {
+    final String id = "66f12b0a3655d07a490908a3";
+
+    when(mockRoutingContext.request().getParam("_id"))
+      .thenReturn(id);
+    when(mockCatRepository.delete(id))
+      .thenReturn(Future.failedFuture(new NotFoundException()));
+
+    catDeleteHandler.handle(mockRoutingContext);
+
+    verify(mockRoutingContext, times(2)).request();
+    verify(mockCatRepository, times(1)).delete(id);
+    verify(mockRoutingContext, times(1)).fail(any(NotFoundException.class));
   }
 }

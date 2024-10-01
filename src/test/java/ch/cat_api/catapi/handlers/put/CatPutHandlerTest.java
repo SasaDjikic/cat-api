@@ -90,7 +90,7 @@ class CatPutHandlerTest
   }
 
   @Test
-  void testPutOfCatPutHandlerThrowsException() throws BadRequestException
+  void testPutOfCatPutHandlerThrowsNullPointerException() throws BadRequestException
   {
     final String id = "66f12b0a3655d07a490908a6";
     final CatRequest catRequest = new CatRequest("Jeff", 2, "Peter");
@@ -113,5 +113,53 @@ class CatPutHandlerTest
     verify(mockCatMapper, times(1)).mapJsonObjectToRequest(any(JsonObject.class));
     verify(mockCatRepository, times(1)).update(id, catRequest);
     verify(mockRoutingContext, times(1)).fail(any(NullPointerException.class));
+  }
+
+  @Test
+  void testPutOfCatPutHandlerThrowsBadRequestException() throws BadRequestException
+  {
+    final String id = "66f12b0a3655d07a490908a6";
+    final JsonObject jsonObject = new JsonObject()
+      .put("_id", id).put("name", "Jeff").put("age", 22);
+
+    when(mockRoutingContext.request().getParam("_id"))
+      .thenReturn(id);
+    when(mockRoutingContext.body().asJsonObject())
+      .thenReturn(jsonObject);
+    when(mockCatMapper.mapJsonObjectToRequest(any(JsonObject.class)))
+      .thenThrow(new BadRequestException());
+
+    catPutHandler.handle(mockRoutingContext);
+
+    verify(mockRoutingContext, times(2)).request();
+    verify(mockRoutingContext, times(2)).body();
+    verify(mockCatMapper, times(1)).mapJsonObjectToRequest(any(JsonObject.class));
+    verify(mockRoutingContext, times(1)).fail(any(BadRequestException.class));
+  }
+
+  @Test
+  void testUpdateOfCatRepositoryFails() throws BadRequestException
+  {
+    final String id = "66f12b0a3655d07a490908a6";
+    final CatRequest catRequest = new CatRequest("Jeff", 2, "Peter");
+    final JsonObject jsonObject = new JsonObject()
+      .put("_id", id).put("name", "Jeff").put("age", 22);
+
+    when(mockRoutingContext.request().getParam("_id"))
+      .thenReturn(id);
+    when(mockRoutingContext.body().asJsonObject())
+      .thenReturn(jsonObject);
+    when(mockCatMapper.mapJsonObjectToRequest(any(JsonObject.class)))
+      .thenReturn(catRequest);
+    when(mockCatRepository.update(id, catRequest))
+      .thenReturn(Future.failedFuture(new BadRequestException()));
+
+    catPutHandler.handle(mockRoutingContext);
+
+    verify(mockRoutingContext, times(2)).request();
+    verify(mockRoutingContext, times(2)).body();
+    verify(mockCatMapper, times(1)).mapJsonObjectToRequest(any(JsonObject.class));
+    verify(mockCatRepository, times(1)).update(id, catRequest);
+    verify(mockRoutingContext, times(1)).fail(any(BadRequestException.class));
   }
 }

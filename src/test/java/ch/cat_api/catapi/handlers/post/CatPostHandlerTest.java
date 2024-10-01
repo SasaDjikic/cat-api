@@ -67,7 +67,7 @@ class CatPostHandlerTest
   }
 
   @Test
-  void testPostOfCatPostHandlerThrowsException() throws BadRequestException
+  void testPostOfCatPostHandlerThrowsNullPointerException() throws BadRequestException
   {
     final CatRequest catRequest = new CatRequest("Jeff", 2, "Peter");
     final JsonObject jsonObject = new JsonObject().put("name", "Jeff")
@@ -85,5 +85,23 @@ class CatPostHandlerTest
     verify(mockRoutingContext, times(2)).body();
     verify(mockCatMapper, times(1)).mapJsonObjectToRequest(any(JsonObject.class));
     verify(mockRoutingContext, times(1)).fail(any(NullPointerException.class));
+  }
+
+  @Test
+  void testPostOfCatPostHandlerThrowsBadRequestException() throws BadRequestException
+  {
+    final JsonObject jsonObject = new JsonObject().put("name", "Jeff")
+      .put("age", 22).put("buyer", "Peter");
+
+    when(mockRoutingContext.body().asJsonObject())
+      .thenReturn(jsonObject);
+    when(mockCatMapper.mapJsonObjectToRequest(any(JsonObject.class)))
+      .thenThrow(new BadRequestException());
+
+    catPostHandler.handle(mockRoutingContext);
+
+    verify(mockRoutingContext, times(2)).body();
+    verify(mockCatMapper, times(1)).mapJsonObjectToRequest(any(JsonObject.class));
+    verify(mockRoutingContext, times(1)).fail(any(BadRequestException.class));
   }
 }

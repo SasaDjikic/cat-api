@@ -11,15 +11,17 @@ import lombok.Getter;
 @Singleton
 public class Owner
 {
-  @Inject
+
   private final OwnerService ownerService;
 
+  @Inject
   public Owner(final OwnerService ownerService)
   {
     this.ownerService = ownerService;
   }
 
-  public Future<List<JsonObject>> getAllCats(String buyer) {
+  public Future<List<JsonObject>> getAllCats(String buyer)
+  {
     return ownerService.getAllCats(buyer);
   }
 }
