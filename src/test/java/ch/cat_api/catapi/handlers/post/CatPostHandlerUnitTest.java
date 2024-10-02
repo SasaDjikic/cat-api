@@ -18,7 +18,7 @@ import io.vertx.ext.web.RoutingContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class CatPostHandlerTest
+class CatPostHandlerUnitTest
 {
 
   private CatPostHandler catPostHandler;

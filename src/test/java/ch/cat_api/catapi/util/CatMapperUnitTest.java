@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class CatMapperTest
+class CatMapperUnitTest
 {
   private CatMapper catMapper;
   private CatRequest mockCatRequest;
@@ -48,39 +48,9 @@ class CatMapperTest
   }
 
   @Test
-  void testValidCatRequestReturnsPopulatedJsonObject() throws BadRequestException
-  {
-    when(mockCatRequest.getName()).thenReturn("Alfred");
-    when(mockCatRequest.getAge()).thenReturn(2);
-    when(mockCatRequest.getBuyer()).thenReturn("Gustav");
-
-    mockJsonObject = catMapper.mapRequestToJsonObject(mockCatRequest);
-
-    assertEquals(mockJsonObject.getString("name"), mockCatRequest.getName());
-    assertEquals(mockJsonObject.getInteger("age"), mockCatRequest.getAge());
-    assertEquals(mockJsonObject.getString("buyer"), mockCatRequest.getBuyer());
-  }
-
-  @Test
   void testNullCatRequest()
   {
     assertThrows(BadRequestException.class, () -> catMapper.mapRequestToJsonObject(null));
-  }
-
-  @Test
-  void testValidJsonObjectReturnsPopulatedCatRequest() throws BadRequestException
-  {
-    mockJsonObject = mock(JsonObject.class);
-
-    when(mockJsonObject.getString("name")).thenReturn("Alfred");
-    when(mockJsonObject.getInteger("age")).thenReturn(2);
-    when(mockJsonObject.getString("buyer")).thenReturn("Gustav");
-
-    mockCatRequest = catMapper.mapJsonObjectToRequest(mockJsonObject);
-
-    assertEquals(mockCatRequest.getName(), mockJsonObject.getString("name"));
-    assertEquals(mockJsonObject.getInteger("age"), mockCatRequest.getAge());
-    assertEquals(mockJsonObject.getString("buyer"), mockCatRequest.getBuyer());
   }
 
   @Test

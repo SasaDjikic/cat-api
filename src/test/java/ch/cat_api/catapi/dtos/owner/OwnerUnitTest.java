@@ -13,7 +13,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class OwnerTest
+class OwnerUnitTest
 {
   private Owner owner;
   private OwnerService mockOwnerService;

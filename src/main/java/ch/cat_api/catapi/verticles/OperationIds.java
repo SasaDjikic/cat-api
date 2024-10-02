@@ -1,7 +1,11 @@
-package ch.cat_api.catapi;
+package ch.cat_api.catapi.verticles;
 
 public final class OperationIds
 {
+  private OperationIds()
+  {
+  }
+
   public static final String GET_CATS = "get-cats";
   public static final String GET_CATS_ID = "get-cats-id";
   public static final String POST_CATS = "post-cats";

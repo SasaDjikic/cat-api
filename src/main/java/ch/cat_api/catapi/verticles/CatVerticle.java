@@ -48,25 +48,25 @@ public class CatVerticle extends AbstractVerticle
   {
     RouterBuilder.create(vertx, "src/main/resources/openapi3.yaml")
       .onSuccess(routerBuilder -> {
-        logger.log(Level.ERROR, "Router builder successfully created");
+        logger.log(Level.INFO, "Router builder successfully created");
         routerBuilder
-          .operation("get-cats")
+          .operation(OperationIds.GET_CATS)
           .handler(catGetHandler)
           .failureHandler(exceptionHandler);
         routerBuilder
-          .operation("post-cats")
+          .operation(OperationIds.POST_CATS)
           .handler(catPostHandler)
           .failureHandler(exceptionHandler);
         routerBuilder
-          .operation("get-cats-id")
+          .operation(OperationIds.GET_CATS_ID)
           .handler(catGetByIdHandler)
           .failureHandler(exceptionHandler);
         routerBuilder
-          .operation("put-cats-id")
+          .operation(OperationIds.PUT_CATS_ID)
           .handler(catPutHandler)
           .failureHandler(exceptionHandler);
         routerBuilder
-          .operation("delete-cats-id")
+          .operation(OperationIds.DELETE_CATS_ID)
           .handler(catDeleteHandler)
           .failureHandler(exceptionHandler);
 

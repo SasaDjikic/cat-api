@@ -31,13 +31,13 @@ public class CatPutHandler implements Handler<RoutingContext>
       routingContext.fail(new BadRequestException(id));
       return;
     }
-    final JsonObject cat = routingContext.body().asJsonObject();
+    final JsonObject requestBody = routingContext.body().asJsonObject();
 
     try {
-      catRepository.update(id, catMapper.mapJsonObjectToRequest(cat))
+      catRepository.update(id, catMapper.mapJsonObjectToRequest(requestBody))
         .onSuccess(mongo -> {
-          cat.put("_id", id);
-          routingContext.json(cat);
+          requestBody.put("_id", id);
+          routingContext.json(requestBody);
           routingContext.response().end();
         })
         .onFailure(routingContext::fail);

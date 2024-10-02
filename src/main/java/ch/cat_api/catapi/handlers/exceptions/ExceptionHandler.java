@@ -21,7 +21,6 @@ public class ExceptionHandler implements Handler<RoutingContext>
   public void handle(final RoutingContext routingContext)
   {
     final Throwable failure = routingContext.failure();
-    routingContext.json(failure.getMessage());
 
     if (!routingContext.failed()) {
       return;

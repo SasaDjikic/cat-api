@@ -4,7 +4,7 @@ GET http://127.0.0.1:8400/cats
 
 ### Get cat by id
 
-GET http://127.0.0.1:8400/cats/66f12a9ceab01e13cde2ecb1
+GET http://127.0.0.1:8400/cats/66fa55b70080407544e27b6
 
 ### Create cat
 
@@ -12,21 +12,21 @@ POST http://127.0.0.1:8400/cats
 Content-Type: application/json
 
 {
-  "name": "Christian",
-  "age": 6
+  "name": "Haluje",
+  "age": 12
 }
 
 ### Put cat
 
-PUT http://127.0.0.1:8400/cats/66f12a9ceab01e13cde2ecb1
+PUT http://127.0.0.1:8400/cats/66fb9023b7fdac4f3d7416a3
 Content-Type: application/json
 
 {
-  "name": "Stefan",
-  "age": 6,
+  "name": "Haluje",
+  "age": 12,
   "buyer": "Jeff"
 }
 
 ### Delete cat
 
-DELETE http://127.0.0.1:8400/cats/66f12b0a3655d07a490908a6
+DELETE http://127.0.0.1:8400/cats/66f12b943655d07a490908a7

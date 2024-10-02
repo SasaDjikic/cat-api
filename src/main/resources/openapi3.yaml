@@ -1,5 +1,7 @@
 openapi: 3.0.1
 
+# TODO: json response exceptions
+
 info:
   title: CAT API
   version: 1.0.0

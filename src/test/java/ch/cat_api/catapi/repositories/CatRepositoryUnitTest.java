@@ -1,5 +1,6 @@
 package ch.cat_api.catapi.repositories;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -24,7 +25,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class CatRepositoryTest
+class CatRepositoryUnitTest
 {
   private MongoClient mockMongoClient;
   private CatMapper mockCatMapper;
@@ -142,6 +143,7 @@ class CatRepositoryTest
 
     assertTrue(future.failed());
     assertInstanceOf(NotFoundException.class, future.cause());
+    assertThat(future.cause().getMessage()).contains(id);
     verify(mockMongoClient, times(1)).findOne(collection, query, null);
   }
 

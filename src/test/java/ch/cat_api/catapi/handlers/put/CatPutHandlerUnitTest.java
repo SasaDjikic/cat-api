@@ -19,7 +19,7 @@ import io.vertx.ext.web.RoutingContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class CatPutHandlerTest
+class CatPutHandlerUnitTest
 {
 
   private CatPutHandler catPutHandler;
@@ -28,15 +28,18 @@ class CatPutHandlerTest
   private RoutingContext mockRoutingContext;
   private HttpServerResponse mockHttpServerResponse;
   private HttpServerRequest mockHttpServerRequest;
+  private JsonObject mockJsonObject;
+  private CatRequest mockCatRequest;
   private RequestBody mockRequestBody;
 
   @BeforeEach
   void setup()
   {
-
     mockCatRepository = mock(CatRepository.class);
     mockCatMapper = mock(CatMapper.class);
     mockRoutingContext = mock(RoutingContext.class);
+    mockJsonObject = mock(JsonObject.class);
+    mockCatRequest = mock(CatRequest.class);
     mockHttpServerResponse = mock(HttpServerResponse.class);
     mockHttpServerRequest = mock(HttpServerRequest.class);
     mockRequestBody = mock(RequestBody.class);
@@ -49,20 +52,20 @@ class CatPutHandlerTest
   }
 
   @Test
-  void testPutReturnsResultOfCatPutHandler() throws BadRequestException
+  void testPutOfCatPutHandlerSetsResultInRoutingContext() throws BadRequestException
   {
     final String id = "66f12b0a3655d07a490908a6";
-    final CatRequest catRequest = new CatRequest("Jeff", 2, "Peter");
-    final JsonObject jsonObject = new JsonObject()
+    mockCatRequest = new CatRequest("Jeff", 2, "Peter");
+    mockJsonObject = new JsonObject()
       .put("_id", id).put("name", "Jeff").put("age", 22);
 
     when(mockRoutingContext.request().getParam("_id"))
       .thenReturn(id);
     when(mockRoutingContext.body().asJsonObject())
-      .thenReturn(jsonObject);
+      .thenReturn(mockJsonObject);
     when(mockCatMapper.mapJsonObjectToRequest(any(JsonObject.class)))
-      .thenReturn(catRequest);
-    when(mockCatRepository.update(id, catRequest))
+      .thenReturn(mockCatRequest);
+    when(mockCatRepository.update(id, mockCatRequest))
       .thenReturn(Future.succeededFuture());
 
     catPutHandler.handle(mockRoutingContext);
@@ -70,7 +73,7 @@ class CatPutHandlerTest
     verify(mockRoutingContext, times(2)).request();
     verify(mockRoutingContext, times(2)).body();
     verify(mockCatMapper, times(1)).mapJsonObjectToRequest(any(JsonObject.class));
-    verify(mockCatRepository, times(1)).update(id, catRequest);
+    verify(mockCatRepository, times(1)).update(id, mockCatRequest);
     verify(mockRoutingContext.response(), times(1)).end();
     verify(mockHttpServerResponse, times(1)).end();
   }
