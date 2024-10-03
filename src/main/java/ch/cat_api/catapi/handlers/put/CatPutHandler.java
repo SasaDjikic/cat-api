@@ -38,7 +38,6 @@ public class CatPutHandler implements Handler<RoutingContext>
         .onSuccess(mongo -> {
           requestBody.put("_id", id);
           routingContext.json(requestBody);
-          routingContext.response().end();
         })
         .onFailure(routingContext::fail);
     }

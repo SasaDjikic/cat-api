@@ -31,7 +31,6 @@ public class CatPostHandler implements Handler<RoutingContext>
         .onSuccess(res -> {
           cat.put("_id", res);
           routingContext.json(cat);
-          routingContext.response().end();
         })
         .onFailure(routingContext::fail);
     }

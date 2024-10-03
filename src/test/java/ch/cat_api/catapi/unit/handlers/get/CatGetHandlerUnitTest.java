@@ -1,4 +1,4 @@
-package ch.cat_api.catapi.handlers.get;
+package ch.cat_api.catapi.unit.handlers.get;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import ch.cat_api.catapi.handlers.exceptions.NotFoundException;
+import ch.cat_api.catapi.handlers.get.CatGetHandler;
 import ch.cat_api.catapi.repositories.CatRepository;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerResponse;
@@ -46,8 +47,6 @@ class CatGetHandlerUnitTest
 
     verify(mockCatRepository, times(1)).load();
     verify(mockRoutingContext, times(1)).json(response);
-    verify(mockRoutingContext.response(), times(1)).end();
-    verify(mockHttpServerResponse, times(1)).end();
   }
 
   @Test

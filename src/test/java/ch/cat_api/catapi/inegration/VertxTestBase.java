@@ -1,4 +1,4 @@
-package ch.cat_api.catapi.handlers;
+package ch.cat_api.catapi.inegration;
 
 import io.micronaut.core.io.socket.SocketUtils;
 import io.vertx.core.Vertx;

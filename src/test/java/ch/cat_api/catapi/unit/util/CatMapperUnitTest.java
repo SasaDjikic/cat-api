@@ -1,4 +1,4 @@
-package ch.cat_api.catapi.util;
+package ch.cat_api.catapi.unit.util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import ch.cat_api.catapi.dtos.cat.requests.CatRequest;
 import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
+import ch.cat_api.catapi.util.CatMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vertx.core.json.JsonObject;
 import org.junit.jupiter.api.BeforeEach;

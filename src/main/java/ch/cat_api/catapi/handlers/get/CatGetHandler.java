@@ -21,10 +21,7 @@ public class CatGetHandler implements Handler<RoutingContext>
   public void handle(final RoutingContext routingContext)
   {
     catRepository.load()
-      .onSuccess(catResponses -> {
-        routingContext.json(catResponses);
-        routingContext.response().end();
-      })
+      .onSuccess(routingContext::json)
       .onFailure(routingContext::fail);
   }
 }

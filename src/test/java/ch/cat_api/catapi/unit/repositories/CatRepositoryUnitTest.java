@@ -1,4 +1,4 @@
-package ch.cat_api.catapi.repositories;
+package ch.cat_api.catapi.unit.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 import ch.cat_api.catapi.dtos.cat.requests.CatRequest;
 import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
 import ch.cat_api.catapi.handlers.exceptions.NotFoundException;
+import ch.cat_api.catapi.repositories.CatRepository;
 import ch.cat_api.catapi.util.CatMapper;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;

@@ -1,4 +1,4 @@
-package ch.cat_api.catapi.handlers.delete;
+package ch.cat_api.catapi.inegration.handlers.delete;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -7,9 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import ch.cat_api.catapi.handlers.VertxTestBase;
+import ch.cat_api.catapi.handlers.delete.CatDeleteHandler;
 import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
 import ch.cat_api.catapi.handlers.exceptions.NotFoundException;
+import ch.cat_api.catapi.inegration.VertxTestBase;
 import ch.cat_api.catapi.repositories.CatRepository;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpMethod;

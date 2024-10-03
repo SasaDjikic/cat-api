@@ -1,13 +1,18 @@
-package ch.cat_api.catapi.handlers.post;
+package ch.cat_api.catapi.inegration.handlers.post;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import ch.cat_api.catapi.dtos.cat.requests.CatRequest;
-import ch.cat_api.catapi.handlers.VertxTestBase;
 import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
+import ch.cat_api.catapi.handlers.post.CatPostHandler;
+import ch.cat_api.catapi.inegration.VertxTestBase;
 import ch.cat_api.catapi.repositories.CatRepository;
 import ch.cat_api.catapi.util.CatMapper;
 import io.vertx.core.Future;

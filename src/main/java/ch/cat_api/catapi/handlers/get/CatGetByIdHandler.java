@@ -30,10 +30,7 @@ public class CatGetByIdHandler implements Handler<RoutingContext>
     }
 
     catRepository.loadById(id)
-      .onSuccess(catResponse -> {
-        routingContext.json(catResponse);
-        routingContext.response().end();
-      })
+      .onSuccess(routingContext::json)
       .onFailure(routingContext::fail);
   }
 }

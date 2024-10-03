@@ -1,17 +1,19 @@
-package ch.cat_api.catapi.dtos.owner;
+package ch.cat_api.catapi.unit;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import ch.cat_api.catapi.dtos.owner.Owner;
+import ch.cat_api.catapi.dtos.owner.OwnerService;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class OwnerUnitTest
 {
@@ -21,7 +23,7 @@ class OwnerUnitTest
   @BeforeEach
   void setup()
   {
-    mockOwnerService = mock(OwnerService.class);
+    mockOwnerService = Mockito.mock(OwnerService.class);
     owner = new Owner(mockOwnerService);
   }
 

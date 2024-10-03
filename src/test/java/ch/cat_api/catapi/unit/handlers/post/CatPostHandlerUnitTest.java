@@ -1,4 +1,4 @@
-package ch.cat_api.catapi.handlers.post;
+package ch.cat_api.catapi.unit.handlers.post;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import ch.cat_api.catapi.dtos.cat.requests.CatRequest;
 import ch.cat_api.catapi.handlers.exceptions.BadRequestException;
+import ch.cat_api.catapi.handlers.post.CatPostHandler;
 import ch.cat_api.catapi.repositories.CatRepository;
 import ch.cat_api.catapi.util.CatMapper;
 import io.vertx.core.Future;
@@ -62,8 +63,6 @@ class CatPostHandlerUnitTest
     verify(mockRoutingContext, times(2)).body();
     verify(mockCatMapper, times(1)).mapJsonObjectToRequest(any(JsonObject.class));
     verify(mockCatRepository, times(1)).save(catRequest);
-    verify(mockRoutingContext.response(), times(1)).end();
-    verify(mockHttpServerResponse, times(1)).end();
   }
 
   @Test
