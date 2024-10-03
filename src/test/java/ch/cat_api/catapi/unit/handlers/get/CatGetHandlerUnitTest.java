@@ -30,6 +30,7 @@ class CatGetHandlerUnitTest
     mockCatRepository = mock(CatRepository.class);
     mockRoutingContext = mock(RoutingContext.class);
     mockHttpServerResponse = mock(HttpServerResponse.class);
+
     catGetHandler = new CatGetHandler(mockCatRepository);
   }
 

@@ -27,11 +27,8 @@ class CatPutHandlerUnitTest
   private CatRepository mockCatRepository;
   private CatMapper mockCatMapper;
   private RoutingContext mockRoutingContext;
-  private HttpServerResponse mockHttpServerResponse;
-  private HttpServerRequest mockHttpServerRequest;
   private JsonObject mockJsonObject;
   private CatRequest mockCatRequest;
-  private RequestBody mockRequestBody;
 
   @BeforeEach
   void setup()
@@ -41,15 +38,15 @@ class CatPutHandlerUnitTest
     mockRoutingContext = mock(RoutingContext.class);
     mockJsonObject = mock(JsonObject.class);
     mockCatRequest = mock(CatRequest.class);
-    mockHttpServerResponse = mock(HttpServerResponse.class);
-    mockHttpServerRequest = mock(HttpServerRequest.class);
-    mockRequestBody = mock(RequestBody.class);
+
+    HttpServerResponse mockHttpServerResponse = mock(HttpServerResponse.class);
+    HttpServerRequest mockHttpServerRequest = mock(HttpServerRequest.class);
+    RequestBody mockRequestBody = mock(RequestBody.class);
+    catPutHandler = new CatPutHandler(mockCatRepository, mockCatMapper);
 
     when(mockRoutingContext.request()).thenReturn(mockHttpServerRequest);
     when(mockRoutingContext.body()).thenReturn(mockRequestBody);
     when(mockRoutingContext.response()).thenReturn(mockHttpServerResponse);
-
-    catPutHandler = new CatPutHandler(mockCatRepository, mockCatMapper);
   }
 
   @Test

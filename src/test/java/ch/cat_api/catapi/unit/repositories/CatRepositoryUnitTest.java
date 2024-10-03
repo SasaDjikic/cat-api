@@ -41,6 +41,7 @@ class CatRepositoryUnitTest
     mockCatMapper = mock(CatMapper.class);
     mockMongoClientDeleteResult = mock(MongoClientDeleteResult.class);
     mockMongoClientUpdateResult = mock(MongoClientUpdateResult.class);
+
     catRepository = new CatRepository(mockMongoClient, mockCatMapper);
   }
 

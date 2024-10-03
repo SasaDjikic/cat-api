@@ -36,6 +36,7 @@ class CatPutHandlerIntegrationTest extends VertxTestBase
     mockCatRepository = mock(CatRepository.class);
     mockCatMapper = mock(CatMapper.class);
     mockCatRequest = mock(CatRequest.class);
+
     catPutHandler = new CatPutHandler(mockCatRepository, mockCatMapper);
   }
 

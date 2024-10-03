@@ -25,8 +25,6 @@ class CatDeleteHandlerUnitTest
   private CatRepository mockCatRepository;
   private RoutingContext mockRoutingContext;
   private HttpServerResponse mockHttpServerResponse;
-  private HttpServerRequest mockHttpServerRequest;
-  private RequestBody mockRequestBody;
 
   @BeforeEach
   void setup()
@@ -34,14 +32,15 @@ class CatDeleteHandlerUnitTest
     mockCatRepository = mock(CatRepository.class);
     mockRoutingContext = mock(RoutingContext.class);
     mockHttpServerResponse = mock(HttpServerResponse.class);
-    mockHttpServerRequest = mock(HttpServerRequest.class);
-    mockRequestBody = mock(RequestBody.class);
+
+    HttpServerRequest mockHttpServerRequest = mock(HttpServerRequest.class);
+    RequestBody mockRequestBody = mock(RequestBody.class);
+    catDeleteHandler = new CatDeleteHandler(mockCatRepository);
 
     when(mockRoutingContext.request()).thenReturn(mockHttpServerRequest);
     when(mockRoutingContext.body()).thenReturn(mockRequestBody);
     when(mockRoutingContext.response()).thenReturn(mockHttpServerResponse);
 
-    catDeleteHandler = new CatDeleteHandler(mockCatRepository);
   }
 
   @Test

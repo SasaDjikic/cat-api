@@ -25,8 +25,6 @@ class CatGetByIdHandlerUnitTest
   private CatGetByIdHandler catGetByIdHandler;
   private CatRepository mockCatRepository;
   private HttpServerResponse mockHttpServerResponse;
-  private HttpServerRequest mockHttpServerRequest;
-  private RequestBody mockRequestBody;
   private RoutingContext mockRoutingContext;
 
   @BeforeEach
@@ -35,8 +33,9 @@ class CatGetByIdHandlerUnitTest
     mockCatRepository = mock(CatRepository.class);
     mockRoutingContext = mock(RoutingContext.class);
     mockHttpServerResponse = mock(HttpServerResponse.class);
-    mockHttpServerRequest = mock(HttpServerRequest.class);
-    mockRequestBody = mock(RequestBody.class);
+
+    HttpServerRequest mockHttpServerRequest = mock(HttpServerRequest.class);
+    RequestBody mockRequestBody = mock(RequestBody.class);
     catGetByIdHandler = new CatGetByIdHandler(mockCatRepository);
 
     when(mockRoutingContext.request()).thenReturn(mockHttpServerRequest);

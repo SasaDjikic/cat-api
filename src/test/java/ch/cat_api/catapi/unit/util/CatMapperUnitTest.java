@@ -23,14 +23,14 @@ class CatMapperUnitTest
   private CatMapper catMapper;
   private CatRequest mockCatRequest;
   private JsonObject mockJsonObject;
-  private ObjectMapper mockObjectMapper;
 
   @BeforeEach
   void setup()
   {
     mockCatRequest = mock(CatRequest.class);
     mockJsonObject = mock(JsonObject.class);
-    mockObjectMapper = mock(ObjectMapper.class);
+
+    ObjectMapper mockObjectMapper = mock(ObjectMapper.class);
     catMapper = new CatMapper(mockObjectMapper);
   }
 
