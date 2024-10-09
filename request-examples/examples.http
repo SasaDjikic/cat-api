@@ -1,0 +1,32 @@
+### Get cats
+
+GET http://127.0.0.1:8400/cats
+
+### Get cat by id
+
+GET http://127.0.0.1:8400/cats/66ed31e56b2ee85420bfaa6c
+
+### Create cat
+
+POST http://127.0.0.1:8400/cats
+Content-Type: application/json
+
+{
+  "name": "Haluje",
+  "age": 12
+}
+
+### Put cat
+
+PUT http://127.0.0.1:8400/cats/66ed31e56b2ee85420bfaa6c
+Content-Type: application/json
+
+{
+  "name": "John",
+  "age": 12,
+  "buyer": "Jeff"
+}
+
+### Delete cat
+
+DELETE http://127.0.0.1:8400/cats/66ed31e56b2ee85420bfaa6c
