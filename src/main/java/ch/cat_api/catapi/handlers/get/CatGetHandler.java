@@ -9,7 +9,6 @@ import jakarta.inject.Singleton;
 @Singleton
 public class CatGetHandler implements Handler<RoutingContext>
 {
-
   private final CatRepository catRepository;
 
   @Inject
