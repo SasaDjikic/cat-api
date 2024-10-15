@@ -1,6 +1,6 @@
 package ch.cat_api.catapi;
 
-import ch.cat_api.catapi.verticles.CatVerticle;
+import ch.cat_api.catapi.verticles.MainVerticle;
 import io.micronaut.context.BeanContext;
 import io.micronaut.inject.qualifiers.Qualifiers;
 import io.vertx.core.Vertx;
@@ -14,7 +14,7 @@ public class Main
 
   public static void main(String[] args)
   {
-    final CatVerticle bean;
+    final MainVerticle bean;
     BeanContext beanContextContext = BeanContext.run();
 
     beanContextContext.registerSingleton(JsonObject.class, new JsonObject()
@@ -30,7 +30,7 @@ public class Main
       .put("maintenanceInitialDelayMS", 1000)
       .put("socketTimeoutMS", 1000), Qualifiers.byName("mongoConfig"));
 
-    bean = beanContextContext.getBean(CatVerticle.class);
+    bean = beanContextContext.getBean(MainVerticle.class);
     Vertx vertx = Vertx.vertx();
     vertx.deployVerticle(bean)
       .onSuccess(res -> logger.log(Level.INFO, "MainVerticle successfully deployed"))

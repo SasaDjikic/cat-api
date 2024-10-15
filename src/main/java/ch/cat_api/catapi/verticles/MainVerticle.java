@@ -16,7 +16,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 @Prototype
-public class CatVerticle extends AbstractVerticle
+public class MainVerticle extends AbstractVerticle
 {
   private final ExceptionHandler exceptionHandler;
   private final CatGetByIdHandler catGetByIdHandler;
@@ -24,10 +24,10 @@ public class CatVerticle extends AbstractVerticle
   private final CatPostHandler catPostHandler;
   private final CatPutHandler catPutHandler;
   private final CatDeleteHandler catDeleteHandler;
-  private static final Logger logger = Logger.getLogger(CatVerticle.class);
+  private static final Logger logger = Logger.getLogger(MainVerticle.class);
 
   @Inject
-  public CatVerticle(
+  public MainVerticle(
     final ExceptionHandler exceptionHandler,
     final CatGetByIdHandler catGetByIdHandler,
     final CatGetHandler catGetHandler,
