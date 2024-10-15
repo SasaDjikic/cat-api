@@ -87,10 +87,10 @@ class KarateTests
 
         mongoClient.insert("cats", cat, res -> {
           if (res.succeeded()) {
-            System.out.println("Successfully inserted cat " + cat.getString("name"));
+            logger.log(Level.INFO,"cat successfully inserted");
           }
           else {
-            res.cause().printStackTrace();
+            logger.log(Level.ERROR,"failed to insert cat");
           }
         });
       }
