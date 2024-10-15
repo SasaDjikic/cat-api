@@ -6,15 +6,16 @@ import ch.cat_api.catapi.handlers.get.CatGetByIdHandler;
 import ch.cat_api.catapi.handlers.get.CatGetHandler;
 import ch.cat_api.catapi.handlers.post.CatPostHandler;
 import ch.cat_api.catapi.handlers.put.CatPutHandler;
+import io.micronaut.context.annotation.Prototype;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.http.HttpServer;
+import io.vertx.core.Promise;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.ext.web.openapi.RouterBuilder;
 import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-@Singleton
+@Prototype
 public class CatVerticle extends AbstractVerticle
 {
   private final ExceptionHandler exceptionHandler;
@@ -44,7 +45,7 @@ public class CatVerticle extends AbstractVerticle
   }
 
   @Override
-  public void start()
+  public void start(final Promise<Void> startPromise)
   {
     RouterBuilder.create(vertx, "src/main/resources/openapi3.yaml")
       .onSuccess(routerBuilder -> {
@@ -70,8 +71,19 @@ public class CatVerticle extends AbstractVerticle
           .handler(catDeleteHandler)
           .failureHandler(exceptionHandler);
 
-        final HttpServer server = vertx.createHttpServer().requestHandler(routerBuilder.createRouter());
-        server.listen(8400);
+        vertx.createHttpServer(new HttpServerOptions().setHost("localhost").setPort(8400))
+          .requestHandler(routerBuilder.createRouter())
+          .listen()
+          .onComplete(res -> {
+            if (res.succeeded()) {
+              logger.log(Level.INFO, "HTTP server started on port 8400");
+              startPromise.complete();
+            }
+            else {
+              logger.log(Level.ERROR, res.cause().getMessage(), res.cause());
+              startPromise.fail(res.cause());
+            }
+          });
       })
       .onFailure(err -> {
         logger.log(Level.ERROR, err.getMessage(), err);

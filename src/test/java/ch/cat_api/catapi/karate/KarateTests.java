@@ -3,9 +3,15 @@ package ch.cat_api.catapi.karate;
 import ch.cat_api.catapi.verticles.CatVerticle;
 import com.intuit.karate.junit5.Karate;
 import io.micronaut.context.BeanContext;
+import io.micronaut.inject.qualifiers.Qualifiers;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.junit5.VertxExtension;
+import io.vertx.junit5.VertxTestContext;
+import java.time.Duration;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,34 +21,47 @@ import org.testcontainers.utility.DockerImageName;
 @ExtendWith(VertxExtension.class)
 class KarateTests
 {
-  private static final String IMAGE = "mongo:latest";
 
+  private static final Logger logger = Logger.getLogger(KarateTests.class);
+
+  private static final String IMAGE = "mongo:latest";
+  private static final Duration STARTUP_TIMEOUT = Duration.ofSeconds(15);
   @SuppressWarnings("resource")
   protected static final GenericContainer<?> mongoContainer = new GenericContainer<>(DockerImageName.parse(IMAGE)
     .asCompatibleSubstituteFor("mongo"))
-    .withExposedPorts(27017);
+    .withExposedPorts(27017)
+    .withStartupTimeout(STARTUP_TIMEOUT);
 
   static MongoClient mongoClient;
 
   @BeforeAll
-  static void setup()
+  static void setup(final Vertx vertx, final VertxTestContext vertxTestContext)
   {
-    System.out.println("test1");
+
     mongoContainer.start();
-    System.out.println(mongoContainer.getMappedPort(27017));
+    BeanContext beanContextContext = BeanContext.run();
 
-    final CatVerticle catVerticleBean;
-    try (BeanContext beanContextContext = BeanContext.run()) {
-      System.out.println("test3");
-      catVerticleBean = beanContextContext.getBean(CatVerticle.class);
-    }
+    final Integer mappedPort = mongoContainer.getMappedPort(27017);
 
-    Vertx vertx = Vertx.vertx();
+    beanContextContext.registerSingleton(JsonObject.class, new JsonObject()
+      .put("host", "localhost")
+      .put("port", mappedPort)
+      .put("db_name", "cat_api")
+      .put("connectTimeoutMS", 1000)
+      .put("serverSelectionTimeoutMS", 1000)
+      .put("maxIdleTimeMS", 1000)
+      .put("maxLifeTimeMS", 1000)
+      .put("waitQueueTimeoutMS", 1000)
+      .put("maintenanceFrequencyMS", 1000)
+      .put("maintenanceInitialDelayMS", 1000)
+      .put("socketTimeoutMS", 1000), Qualifiers.byName("mongoConfig"));
 
-    System.out.println(vertx.deployVerticle(catVerticleBean).result());
-    System.out.println("test4");
-//      .onSuccess(res -> System.out.println("Deployed verticle: " + res))
-//      .onFailure(err -> System.out.println("Failed to deploy verticle: " + err));
+    final CatVerticle bean = beanContextContext.getBean(CatVerticle.class);
+
+    vertx.deployVerticle(bean)
+      .onSuccess(res -> logger.log(Level.INFO, "MainVerticle successfully deployed"))
+      .onFailure(err -> logger.log(Level.ERROR, err.getMessage(), err))
+      .onComplete(vertxTestContext.succeedingThenComplete());
 
   }
 
