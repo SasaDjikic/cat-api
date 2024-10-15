@@ -34,69 +34,69 @@ class KarateTests
     .withExposedPorts(27017)
     .withStartupTimeout(STARTUP_TIMEOUT);
 
-
   @BeforeAll
   static void setup(final Vertx vertx, final VertxTestContext vertxTestContext)
   {
     mongoContainer.start();
-    final BeanContext beanContextContext = BeanContext.run();
+    final MainVerticle bean;
+    try (BeanContext beanContextContext = BeanContext.run()) {
+      final Integer mappedPort = mongoContainer.getMappedPort(27017);
 
-    final Integer mappedPort = mongoContainer.getMappedPort(27017);
+      final JsonObject mongoConfig = new JsonObject()
+        .put("host", "localhost")
+        .put("port", mappedPort)
+        .put("db_name", "cat_api")
+        .put("connectTimeoutMS", 1000)
+        .put("serverSelectionTimeoutMS", 1000)
+        .put("maxIdleTimeMS", 1000)
+        .put("maxLifeTimeMS", 1000)
+        .put("waitQueueTimeoutMS", 1000)
+        .put("maintenanceFrequencyMS", 1000)
+        .put("maintenanceInitialDelayMS", 1000)
+        .put("socketTimeoutMS", 1000);
 
-    JsonObject mongoConfig = new JsonObject()
-      .put("host", "localhost")
-      .put("port", mappedPort)
-      .put("db_name", "cat_api")
-      .put("connectTimeoutMS", 1000)
-      .put("serverSelectionTimeoutMS", 1000)
-      .put("maxIdleTimeMS", 1000)
-      .put("maxLifeTimeMS", 1000)
-      .put("waitQueueTimeoutMS", 1000)
-      .put("maintenanceFrequencyMS", 1000)
-      .put("maintenanceInitialDelayMS", 1000)
-      .put("socketTimeoutMS", 1000);
+      beanContextContext.registerSingleton(JsonObject.class, mongoConfig, Qualifiers.byName("mongoConfig"));
 
-    beanContextContext.registerSingleton(JsonObject.class, mongoConfig, Qualifiers.byName("mongoConfig"));
+      mongoClient = MongoClient.createShared(vertx, mongoConfig);
 
-    mongoClient = MongoClient.createShared(vertx, mongoConfig);
+      final JsonArray cats = new JsonArray("""
+        [
+         {
+          "_id": "670e4a2e8213ed68adccd199",
+          "name": "Fluffy",
+          "age": 1,
+          "buyer": "Jeff"
+         },
+         {
+          "_id": "670e4a5b0937f8de1a9d605e",
+          "name": "Whiskers",
+          "age": 3,
+          "buyer": null
+         },
+         {
+          "_id": "670e4a5f7899964d2f7f3d4c",
+          "name": "Cookie",
+          "age": 12,
+          "buyer": null
+         }
+        ]
+        """);
 
-    JsonArray cats = new JsonArray("""
-      [
-       {
-        "_id": "670e4a2e8213ed68adccd199",
-        "name": "Fluffy",
-        "age": 1,
-        "buyer": "Jeff"
-       },
-       {
-        "_id": "670e4a5b0937f8de1a9d605e",
-        "name": "Whiskers",
-        "age": 3,
-        "buyer": null
-       },
-       {
-        "_id": "670e4a5f7899964d2f7f3d4c",
-        "name": "Cookie",
-        "age": 12,
-        "buyer": null
-       }
-      ]
-      """);
+      for (int i = 0; i < cats.size(); i++) {
+        final JsonObject cat = cats.getJsonObject(i);
 
-    for (int i = 0; i < cats.size(); i++) {
-      final JsonObject cat = cats.getJsonObject(i);
+        mongoClient.insert("cats", cat, res -> {
+          if (res.succeeded()) {
+            System.out.println("Successfully inserted cat " + cat.getString("name"));
+          }
+          else {
+            res.cause().printStackTrace();
+          }
+        });
+      }
 
-      mongoClient.insert("cats", cat, res -> {
-        if (res.succeeded()) {
-          System.out.println("Successfully inserted cat " + cat.getString("name"));
-        }
-        else {
-          res.cause().printStackTrace();
-        }
-      });
+      bean = beanContextContext.getBean(MainVerticle.class);
     }
-
-    final MainVerticle bean = beanContextContext.getBean(MainVerticle.class);
 
     vertx.deployVerticle(bean)
       .onSuccess(res -> logger.log(Level.INFO, "MainVerticle successfully deployed"))
