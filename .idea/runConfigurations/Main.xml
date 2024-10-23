@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Main" type="MicronautRunConfigurationType" factoryName="Micronaut" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="ch.cat_api.catapi.Main" />
+    <module name="catapi" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="ch.cat_api.catapi.verticles.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="alternativeJrePath" />
+    <option name="alternativeJrePathEnabled" value="false" />
+    <option name="mainClass" value="ch.cat_api.catapi.Main" />
+    <option name="passParentEnvs" value="true" />
+    <option name="programParameters" />
+    <option name="vmParameters" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
